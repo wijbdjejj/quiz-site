@@ -218,7 +218,9 @@ h+='<div style=display:flex;justify-content:space-between;padding:.4rem 0;border
 h+='<div style=display:flex;justify-content:space-between;padding:.4rem 0;font-size:.82rem><span>已完成</span><span style=font-weight:600;color:#3d6b4a>'+d+" ("+Math.round(d/t*100)+"%)</span></div>";
 h+='<div style=display:flex;justify-content:space-between;padding:.4rem 0;font-size:.82rem><span>待复习错题</span><span style=font-weight:600;color:#e57373>'+w.length+"</span></div>";
 document.getElementById("stc").innerHTML=h}
-fetch("quiz-data.json").then(function(r){return r.json()}).then(function(d){Q=d;ld()});
-fetch("explanation-data.json").then(function(r){return r.json()}).then(function(d){E=d});
 function ld(){document.getElementById("lo").style.display="none";document.getElementById("p-hm").classList.add("ac");up()}
+function fail(){document.getElementById("lo").innerHTML="<div style=font-size:2rem;margin-bottom:.5rem>❌</div>数据加载失败，请检查网络<br><button class=btn style=margin-top:1rem onclick=location.reload()>重试</button>"}
+fetch("quiz-data.json").then(function(r){if(!r.ok)throw Error(r.status);return r.json()}).then(function(d){Q=d;ld()}).catch(fail);
+fetch("explanation-data.json").then(function(r){if(!r.ok)throw Error(r.status);return r.json()}).then(function(d){E=d}).catch(function(e){console.log("explanation load error",e)});
+setTimeout(function(){if(!document.getElementById("p-hm").classList.contains("ac")){document.getElementById("lo").innerHTML="<div style=font-size:2rem;margin-bottom:.5rem>⚠️</div>加载超时<br><button class=btn style=margin-top:1rem onclick=location.reload()>重试</button>"}},8000)
 </script></body></html>
